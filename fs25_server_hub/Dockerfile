@@ -14,8 +14,9 @@ RUN apk add --no-cache python3
 
 WORKDIR /app
 COPY app.py /app/app.py
+COPY migration.py /app/migration.py
 COPY web /app/web
 COPY run.sh /run.sh
-RUN chmod a+x /run.sh /app/app.py
+RUN chmod a+x /run.sh /app/app.py /app/migration.py
 
 CMD ["/run.sh"]
