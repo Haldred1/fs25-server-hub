@@ -1,0 +1,79 @@
+configuration:
+  site_title:
+    name: Dashboard title
+    description: Name shown at the top of FS25 Server Hub. This can be your farm or server name.
+  currency_symbol:
+    name: Currency symbol
+    description: Symbol used for farm balances and economy values, for example £, € or $.
+  stats_url:
+    name: GIANTS server statistics URL
+    description: Required. Statistics XML URL from GIANTS Server Manager Web API. Provides server state and connected players.
+  map_url:
+    name: GIANTS live map URL
+    description: Required. Live map image URL from the GIANTS Server Manager Web API.
+  career_url:
+    name: careerSavegame.xml URL
+    description: Required. Web API URL for careerSavegame.xml. Provides farm balance, settings and career data.
+  vehicles_url:
+    name: vehicles.xml URL
+    description: Required. Web API URL for vehicles.xml. Provides fleet, saved objects, pallets and vehicle state.
+  economy_url:
+    name: economy.xml URL
+    description: Required. Web API URL for economy.xml. Provides stored products, prices and economy information.
+  placeables_url:
+    name: placeables.xml HTTP URL
+    description: Optional. Use when placeables.xml is exposed over HTTP. Leave blank when using the FTP connection below; the Hub will read it from the same savegame folder as missions.xml.
+  missions_url:
+    name: missions.xml HTTP URL
+    description: Optional. HTTP URL for missions.xml. Leave blank when using the FTP connection below.
+  missions_ftp_host:
+    name: Savegame FTP host
+    description: Optional. FTP hostname or IP supplied by your game-server provider. Used for missions.xml and placeables.xml.
+  missions_ftp_port:
+    name: Savegame FTP port
+    description: FTP port supplied by your provider. Do not assume port 21; hosted servers may use a custom port.
+  missions_ftp_username:
+    name: Savegame FTP username
+    description: FTP username supplied by your game-server provider.
+  missions_ftp_password:
+    name: Savegame FTP password
+    description: FTP password supplied by your provider. Home Assistant masks this field.
+  missions_ftp_path:
+    name: Remote missions.xml path
+    description: Full remote savegame path ending in missions.xml, for example /profile/savegame1/missions.xml. placeables.xml is automatically read from the same folder.
+  missions_ftp_tls:
+    name: Use explicit FTPS
+    description: Enable only when your provider specifically requires explicit FTP over TLS.
+  missions_ftp_passive:
+    name: Use passive FTP
+    description: Recommended for most hosted servers. Disable only if your provider requires active FTP.
+  stats_poll_seconds:
+    name: Statistics poll interval
+    description: Seconds between server-statistics checks while normal polling is active. 60 seconds is recommended.
+  map_poll_seconds:
+    name: Map poll interval
+    description: Seconds between live-map checks while normal polling is active. 60 seconds is recommended.
+  save_poll_seconds:
+    name: Savegame poll interval
+    description: Seconds between career, vehicles, economy, missions and production checks. 120 seconds is recommended.
+  request_timeout_seconds:
+    name: Network request timeout
+    description: Maximum seconds to wait for an HTTP or FTP request before recording an error.
+  adaptive_polling:
+    name: Adaptive polling
+    description: Slow savegame and map checks when the server is empty, then automatically return to normal speed when activity resumes.
+  empty_server_save_poll_seconds:
+    name: Empty-server save interval
+    description: Savegame polling interval while the server is empty and no active contract requires faster checks.
+  empty_server_map_poll_seconds:
+    name: Empty-server map interval
+    description: Live-map polling interval while the server is empty.
+  balance_sample_retention_days:
+    name: Detailed balance retention
+    description: Number of days to keep high-frequency balance samples before compressing older samples into daily summaries. Transaction history is retained.
+  setup_mode:
+    name: Setup / connection-test mode
+    description: Temporarily open the setup checker instead of the dashboard. It can test every configured HTTP feed and the FTP connection. Turn this off after testing.
+  migration_mode:
+    name: Legacy database migration mode
+    description: One-time tool for importing fs25.db from an old Local installation. Leave disabled for normal use.
