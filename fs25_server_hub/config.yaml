@@ -2,6 +2,7 @@ name: "FS25 Server Hub"
 version: "0.5.8"
 slug: "fs25_server_hub"
 description: "Live Farming Simulator 25 dashboard with an HD map, audited economy ledger, detailed contracts, fleet, mods and play history."
+url: "https://github.com/Haldred1/fs25-server-hub"
 startup: application
 boot: auto
 init: false
@@ -40,6 +41,7 @@ options:
   empty_server_save_poll_seconds: 300
   empty_server_map_poll_seconds: 600
   balance_sample_retention_days: 90
+  setup_mode: false
   migration_mode: false
 schema:
   site_title: str
@@ -66,4 +68,5 @@ schema:
   empty_server_save_poll_seconds: int
   empty_server_map_poll_seconds: int
   balance_sample_retention_days: int
+  setup_mode: bool
   migration_mode: bool
