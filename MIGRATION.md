@@ -16,3 +16,16 @@ The existing Local installation is identified by Supervisor as `local_fs25_serve
 The data-copy step depends on how the Home Assistant host is being accessed. Do not guess the Supervisor data-volume path. Use a supported backup/export route or an inspected host path during the migration.
 
 Once the repository edition is in place, future updates do **not** repeat this migration: bump the app version in GitHub and use Home Assistant's normal Update button.
+
+## Recommended database transfer (v0.5.6)
+
+1. Stop the old Local FS25 Server Hub so its database is no longer changing.
+2. Create a manual Home Assistant backup containing the old Local FS25 Server Hub and download it.
+3. Extract and consolidate `fs25.db`; retain any `fs25.db-wal` alongside it during consolidation so committed WAL transactions are included.
+4. Install the repository edition but keep the Local installation.
+5. In the repository edition Configuration, set `migration_mode: true`, save, and start/restart the app.
+6. Open the app. Migration mode shows a database upload page instead of the dashboard. Upload the consolidated `fs25.db`.
+7. When import succeeds, set `migration_mode: false`, save, and restart the repository edition.
+8. Verify Economy and Play History before removing the Local installation.
+
+The migration service is only reachable through Home Assistant Ingress. It rejects non-SQLite files, runs `PRAGMA integrity_check`, verifies the core FS25 tables, and creates `/data/fs25-before-migration-<timestamp>.db` before replacing an existing repository-edition database.
