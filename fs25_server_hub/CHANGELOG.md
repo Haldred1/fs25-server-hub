@@ -1,3 +1,9 @@
+## 0.5.7
+- Fixes first-start migration mode when upgrading from the old Local installation.
+- The 0.5.6 version marker was published before its final startup files, allowing Home Assistant to cache an incomplete 0.5.6 build that launched the normal dashboard process and rejected blank feed URLs.
+- Republishes the completed migration startup script, migration server and Docker image under a new version so Home Assistant is forced to rebuild the app.
+- No farm history or existing repository-edition `/data` is changed by this update.
+
 ## 0.5.6
 - Added a one-time **Migration mode** for safely moving `fs25.db` from the old Local installation into the repository edition.
 - Migration mode pauses all normal FS25 polling and serves an Ingress-only database upload page instead.
@@ -28,7 +34,7 @@
 ## 0.5.2
 
 - Adds a **Needs Review** queue for unclassified income and spending with manual categories and optional custom titles.
-- Adds user-approved classification rules that only match future unclassified movements with the same income/spending direction and a narrow amount range; stronger contract, production, product, supply and fleet evidence always wins.
+- Adds user-approved classification rules that only match future unclassified movements with the same direction and a narrow amount range; stronger contract, production, product, supply and fleet evidence always wins.
 - Adds read-only **Diagnostics** showing source health, latency, payload size, changed/unchanged counts, adaptive intervals and database size.
 - Reuses one FTP login for `missions.xml` and `placeables.xml` and hashes savegame payloads so unchanged files are not parsed again.
 - Adds adaptive polling: normal speed while players are online or contracts are active, quieter savegame and map checks while the server is empty, with immediate wake-up when activity resumes.
