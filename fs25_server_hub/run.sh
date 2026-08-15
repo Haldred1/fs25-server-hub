@@ -24,6 +24,7 @@ export EMPTY_SERVER_SAVE_POLL_SECONDS="$(bashio::config 'empty_server_save_poll_
 export EMPTY_SERVER_MAP_POLL_SECONDS="$(bashio::config 'empty_server_map_poll_seconds')"
 export BALANCE_SAMPLE_RETENTION_DAYS="$(bashio::config 'balance_sample_retention_days')"
 MIGRATION_MODE="$(bashio::config 'migration_mode')"
+SETUP_MODE="$(bashio::config 'setup_mode')"
 export CURRENCY_SYMBOL="$(bashio::config 'currency_symbol')"
 export SITE_TITLE="$(bashio::config 'site_title')"
 export PORT="8099"
@@ -31,10 +32,28 @@ export DATA_DIR="/data"
 export ALLOW_DIRECT="false"
 
 bashio::log.info "Starting FS25 Server Hub"
+
 if [[ "${MIGRATION_MODE}" == "true" ]]; then
   bashio::log.warning "Database migration mode is enabled; normal FS25 polling is paused"
   exec python3 /app/migration.py
 fi
+
+MISSING_REQUIRED=()
+[[ -z "${FS25_STATS_URL}" ]] && MISSING_REQUIRED+=("stats_url")
+[[ -z "${FS25_MAP_URL}" ]] && MISSING_REQUIRED+=("map_url")
+[[ -z "${FS25_CAREER_URL}" ]] && MISSING_REQUIRED+=("career_url")
+[[ -z "${FS25_VEHICLES_URL}" ]] && MISSING_REQUIRED+=("vehicles_url")
+[[ -z "${FS25_ECONOMY_URL}" ]] && MISSING_REQUIRED+=("economy_url")
+
+if [[ "${SETUP_MODE}" == "true" || ${#MISSING_REQUIRED[@]} -gt 0 ]]; then
+  if [[ ${#MISSING_REQUIRED[@]} -gt 0 ]]; then
+    bashio::log.warning "Setup checker started because required configuration is missing: ${MISSING_REQUIRED[*]}"
+  else
+    bashio::log.warning "Manual setup / connection-test mode is enabled; normal FS25 polling is paused"
+  fi
+  exec python3 /app/setup.py
+fi
+
 MISSION_SOURCE="$([[ -n "${FS25_MISSIONS_URL}" ]] && echo http || ([[ -n "${FS25_MISSIONS_FTP_HOST}" ]] && echo ftp || echo not-configured))"
 PRODUCTION_SOURCE="$([[ -n "${FS25_PLACEABLES_URL}" ]] && echo http || ([[ -n "${FS25_MISSIONS_FTP_HOST}" && -n "${FS25_MISSIONS_FTP_PATH}" ]] && echo ftp-sibling || echo not-configured))"
 bashio::log.info "Stats poll: ${STATS_POLL_SECONDS}s; map poll: ${MAP_POLL_SECONDS}s; savegame poll: ${SAVE_POLL_SECONDS}s; adaptive polling: ${ADAPTIVE_POLLING}; mission source: ${MISSION_SOURCE}; production source: ${PRODUCTION_SOURCE}"
