@@ -1,0 +1,67 @@
+name: "FS25 Server Hub"
+version: "0.5.5"
+slug: "fs25_server_hub"
+description: "Live Farming Simulator 25 dashboard with an HD map, audited economy ledger, detailed contracts, fleet, mods and play history."
+startup: application
+boot: auto
+init: false
+arch:
+  - aarch64
+  - amd64
+ingress: true
+ingress_port: 8099
+ingress_stream: true
+panel_icon: "mdi:tractor"
+panel_title: "FS25 Server Hub"
+panel_admin: false
+backup: hot
+options:
+  site_title: "Elite Farming Server Hub"
+  currency_symbol: "£"
+  stats_url: ""
+  map_url: ""
+  career_url: ""
+  vehicles_url: ""
+  economy_url: ""
+  placeables_url: ""
+  missions_url: ""
+  missions_ftp_host: ""
+  missions_ftp_port: 21
+  missions_ftp_username: ""
+  missions_ftp_password: ""
+  missions_ftp_path: ""
+  missions_ftp_tls: false
+  missions_ftp_passive: true
+  stats_poll_seconds: 60
+  map_poll_seconds: 60
+  save_poll_seconds: 120
+  request_timeout_seconds: 60
+  adaptive_polling: true
+  empty_server_save_poll_seconds: 300
+  empty_server_map_poll_seconds: 600
+  balance_sample_retention_days: 90
+schema:
+  site_title: str
+  currency_symbol: str
+  stats_url: str
+  map_url: str
+  career_url: str
+  vehicles_url: str
+  economy_url: str
+  placeables_url: str
+  missions_url: str
+  missions_ftp_host: str
+  missions_ftp_port: port
+  missions_ftp_username: str
+  missions_ftp_password: password
+  missions_ftp_path: str
+  missions_ftp_tls: bool
+  missions_ftp_passive: bool
+  stats_poll_seconds: int
+  map_poll_seconds: int
+  save_poll_seconds: int
+  request_timeout_seconds: int
+  adaptive_polling: bool
+  empty_server_save_poll_seconds: int
+  empty_server_map_poll_seconds: int
+  balance_sample_retention_days: int
