@@ -23,6 +23,7 @@ export ADAPTIVE_POLLING="$(bashio::config 'adaptive_polling')"
 export EMPTY_SERVER_SAVE_POLL_SECONDS="$(bashio::config 'empty_server_save_poll_seconds')"
 export EMPTY_SERVER_MAP_POLL_SECONDS="$(bashio::config 'empty_server_map_poll_seconds')"
 export BALANCE_SAMPLE_RETENTION_DAYS="$(bashio::config 'balance_sample_retention_days')"
+MIGRATION_MODE="$(bashio::config 'migration_mode')"
 export CURRENCY_SYMBOL="$(bashio::config 'currency_symbol')"
 export SITE_TITLE="$(bashio::config 'site_title')"
 export PORT="8099"
@@ -30,6 +31,10 @@ export DATA_DIR="/data"
 export ALLOW_DIRECT="false"
 
 bashio::log.info "Starting FS25 Server Hub"
+if [[ "${MIGRATION_MODE}" == "true" ]]; then
+  bashio::log.warning "Database migration mode is enabled; normal FS25 polling is paused"
+  exec python3 /app/migration.py
+fi
 MISSION_SOURCE="$([[ -n "${FS25_MISSIONS_URL}" ]] && echo http || ([[ -n "${FS25_MISSIONS_FTP_HOST}" ]] && echo ftp || echo not-configured))"
 PRODUCTION_SOURCE="$([[ -n "${FS25_PLACEABLES_URL}" ]] && echo http || ([[ -n "${FS25_MISSIONS_FTP_HOST}" && -n "${FS25_MISSIONS_FTP_PATH}" ]] && echo ftp-sibling || echo not-configured))"
 bashio::log.info "Stats poll: ${STATS_POLL_SECONDS}s; map poll: ${MAP_POLL_SECONDS}s; savegame poll: ${SAVE_POLL_SECONDS}s; adaptive polling: ${ADAPTIVE_POLLING}; mission source: ${MISSION_SOURCE}; production source: ${PRODUCTION_SOURCE}"
