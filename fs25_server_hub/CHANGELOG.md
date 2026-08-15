@@ -1,3 +1,10 @@
+## 0.5.6
+- Added a one-time **Migration mode** for safely moving `fs25.db` from the old Local installation into the repository edition.
+- Migration mode pauses all normal FS25 polling and serves an Ingress-only database upload page instead.
+- Uploaded databases are integrity-checked and must contain the expected FS25 history tables.
+- If the repository edition already has a database, a timestamped safety copy is created before import.
+- After import, turn Migration mode off and restart the app once to resume the normal dashboard.
+
 ## 0.5.5
 - Converted FS25 Server Hub into a Home Assistant app-repository release.
 - Future releases are detected from the repository when `config.yaml` is given a newer version, allowing normal Home Assistant **Update** installs.
@@ -21,9 +28,9 @@
 ## 0.5.2
 
 - Adds a **Needs Review** queue for unclassified income and spending with manual categories and optional custom titles.
-- Adds user-approved classification rules that only match future unclassified entries with the same direction and a narrow amount range; stronger contract, product, production and fleet evidence always wins.
+- Adds user-approved classification rules that only match future unclassified movements with the same income/spending direction and a narrow amount range; stronger contract, production, product, supply and fleet evidence always wins.
 - Adds read-only **Diagnostics** showing source health, latency, payload size, changed/unchanged counts, adaptive intervals and database size.
-- Reuses one GPORTAL FTP login for `missions.xml` and `placeables.xml` and hashes all savegame payloads so unchanged files are not parsed again.
+- Reuses one FTP login for `missions.xml` and `placeables.xml` and hashes savegame payloads so unchanged files are not parsed again.
 - Adds adaptive polling: normal speed while players are online or contracts are active, quieter savegame and map checks while the server is empty, with immediate wake-up when activity resumes.
 - Removes the unnecessary 30-second browser overview refresh while the live event stream is connected; a slower fallback remains for reconnection failures.
 - Compresses balance samples older than the configured retention period into daily summaries while keeping transaction and play-session history indefinitely.
@@ -34,7 +41,6 @@
 ## 0.5.1
 - Added a custom Home Assistant add-on icon and logo using a green tractor graphic.
 - Preserved the existing mdi:tractor sidebar panel icon.
-
 
 ## 0.5.0
 
@@ -71,7 +77,6 @@
 - Added masked FTP password configuration plus host, port, username, path, TLS and passive-mode options.
 - HTTP `missions_url` remains supported and takes priority when configured.
 - Improved missing-source messages in the Economy page and app logs.
-
 
 ## 0.3.0
 
