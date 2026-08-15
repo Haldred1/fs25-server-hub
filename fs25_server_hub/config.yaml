@@ -1,5 +1,5 @@
 name: "FS25 Server Hub"
-version: "0.5.8"
+version: "0.5.9"
 slug: "fs25_server_hub"
 description: "Live Farming Simulator 25 dashboard with an HD map, audited economy ledger, detailed contracts, fleet, mods and play history."
 url: "https://github.com/Haldred1/fs25-server-hub"
