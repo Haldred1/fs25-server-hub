@@ -1,3 +1,18 @@
+## 0.5.9
+- Adds a first-run **Setup checker** instead of stopping when one or more required GIANTS feed URLs are blank.
+- Adds manual `setup_mode` so an existing installation can temporarily open the connection tester without changing normal dashboard data.
+- Setup checker can test each configured HTTP feed, validate XML responses, test the live map response, and report latency/payload details.
+- Adds a one-click FTP/FTPS test that logs in using the stored Home Assistant configuration, validates `missions.xml`, derives the sibling `placeables.xml` path and tests that file too.
+- The setup checker never returns or displays the stored FTP password.
+- Adds Home Assistant configuration translations with friendly field names and detailed descriptions for all URLs, FTP settings, polling options, setup mode and migration mode.
+- Improves documentation for fresh installs, GPORTAL custom FTP ports, provider compatibility, troubleshooting and repository updates.
+- Refreshes the public repository README and removes wording that described the app as only a private one-server project.
+- Normal `/data` persistence, migrated history and existing server configuration are preserved by this update.
+
+## 0.5.8
+- Proof-of-concept repository update confirming that Home Assistant can detect and install new FS25 Server Hub releases without a Home Assistant Core restart or manual ZIP upload.
+- Added a visible repository version marker in the dashboard header.
+
 ## 0.5.7
 - Fixes first-start migration mode when upgrading from the old Local installation.
 - The 0.5.6 version marker was published before its final startup files, allowing Home Assistant to cache an incomplete 0.5.6 build that launched the normal dashboard process and rejected blank feed URLs.
@@ -34,7 +49,7 @@
 ## 0.5.2
 
 - Adds a **Needs Review** queue for unclassified income and spending with manual categories and optional custom titles.
-- Adds user-approved classification rules that only match future unclassified movements with the same direction and a narrow amount range; stronger contract, production, product, supply and fleet evidence always wins.
+- Adds user-approved classification rules that only match future unclassified movements with the same income/spending direction and a narrow amount range; stronger contract, production, product, supply and fleet evidence always wins.
 - Adds read-only **Diagnostics** showing source health, latency, payload size, changed/unchanged counts, adaptive intervals and database size.
 - Reuses one FTP login for `missions.xml` and `placeables.xml` and hashes savegame payloads so unchanged files are not parsed again.
 - Adds adaptive polling: normal speed while players are online or contracts are active, quieter savegame and map checks while the server is empty, with immediate wake-up when activity resumes.
