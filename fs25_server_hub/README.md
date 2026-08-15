@@ -1,6 +1,8 @@
 # FS25 Server Hub
 
-A private Home Assistant app for a Farming Simulator 25 dedicated server.
+A Home Assistant app for Farming Simulator 25 dedicated servers.
+
+FS25 Server Hub turns the standard GIANTS dedicated-server feeds and savegame XML files into a live dashboard with an interactive map, fleet information, farm economy history, contracts, mods, play history and diagnostics.
 
 ## Included pages
 
@@ -11,31 +13,58 @@ A private Home Assistant app for a Farming Simulator 25 dedicated server.
 - Play History with sessions, leaderboard and daily activity
 - Diagnostics with feed health, adaptive polling and database status
 
-The app uses Home Assistant Ingress, so it is available through the normal Home Assistant interface and Nabu Casa remote connection.
+The app uses Home Assistant Ingress, so it is available through the normal Home Assistant interface and supported remote access such as Nabu Casa.
 
-## Version 0.5.2 — Review and optimisation
+## Setup-friendly installation
 
-Unclassified balance changes now appear in a **Needs Review** queue. You can choose a proper category, add a custom title such as “Mushroom autosale”, and optionally remember a narrow amount-range rule for future entries. Saved rules only run after the normal contract, production, product, supply and fleet matching has failed.
+A new installation no longer has to be fully configured before it can stay running. If one of the five required GIANTS feeds is missing, FS25 Server Hub opens a **Setup checker** instead of exiting.
 
-The app now hashes savegame payloads and reuses unchanged parsed data, shares one FTP session between `missions.xml` and `placeables.xml`, and uses adaptive polling. Savegame and map checks slow down while the server is empty, then return to the configured interval as soon as a player joins or a contract remains active.
+The setup checker shows what is missing and can test:
 
-The Diagnostics page is read-only and shows source health, latency, payload sizes, changed/unchanged checks, current polling intervals and database housekeeping. No Home Assistant notifications, alarms, MQTT sensors or extra integrations are added. The existing tractor icon and logo are unchanged.
+- server statistics XML
+- live map image
+- `careerSavegame.xml`
+- `vehicles.xml`
+- `economy.xml`
+- optional `missions.xml` and `placeables.xml` HTTP sources
+- FTP/FTPS login, `missions.xml`, and the automatically derived `placeables.xml` path
 
-## Version 0.5.0 — Production autosale tracking
+An optional `setup_mode` switch makes the checker available later when changing server provider details or troubleshooting connectivity.
 
-The Economy page now correlates `careerSavegame.xml`, `vehicles.xml`, `economy.xml`, `missions.xml` and `placeables.xml` between saves. This lets it distinguish contract payments, production autosales, product sales, fleet purchases, supply purchases and unclassified running costs. Every ledger row displays its confidence and can expose the evidence used.
+Home Assistant configuration translations give each option a friendly name and description, including reminders that hosted FTP servers can use non-standard ports.
 
-Pallets, bales and big bags are now classified separately from farm machinery. For example, chicken feed is displayed as a supply purchase rather than a vehicle purchase.
+## Compatibility
 
-The app can download `missions.xml` directly from GPORTAL FTP. Version 0.5.0 automatically reads `placeables.xml` from that same savegame folder, so production autosale tracking needs no additional FTP credentials or path. An optional `placeables_url` is available for HTTP-based setups.
+The app is tested with a Farming Simulator 25 dedicated server hosted by **GPORTAL**, using the standard GIANTS Server Manager Web API and direct FTP savegame access.
 
-The dashboard remains usable without a mission source, but contract income will be labelled as inferred.
+Other providers should work when they expose the same GIANTS Web API resources and/or standard FTP/FTPS access to the FS25 savegame files. Provider-specific ports, paths and access methods can differ, so compatibility with every host is not claimed until tested.
+
+Nothing in the normal collector is hard-coded to one farm's URLs or credentials.
+
+## Economy and savegame correlation
+
+The Economy page correlates `careerSavegame.xml`, `vehicles.xml`, `economy.xml`, `missions.xml` and `placeables.xml` between saves. This lets it distinguish contract payments, production autosales, product sales, fleet purchases, supply purchases and unclassified running costs. Every ledger row displays its confidence and can expose the evidence used.
+
+Pallets, bales and big bags are classified separately from farm machinery. The app can download `missions.xml` directly over FTP and automatically reads `placeables.xml` from the same savegame folder, so production autosale tracking needs no second set of FTP credentials.
+
+The dashboard remains usable without a mission source, but contract income can be less confidently classified.
 
 ## Interactive HD map
 
 The map supports zoom, pan, player and vehicle tracking, field and owned-land layers, clickable marker details, player focus controls and full-screen mode. The app requests the configured GIANTS map endpoint at up to 2048 pixels and automatically falls back if necessary.
 
+## Review, optimisation and diagnostics
 
-## Economy audit
+Unclassified balance changes appear in a **Needs Review** queue. Users can choose a category, add a custom title and optionally remember a narrow amount-range rule for future entries. Saved rules only run after normal contract, production, product, supply and fleet matching has failed.
 
-Version 0.5.0 also reads `placeables.xml`, including each production point's `directSellFillType` settings. Positive balance changes with no stronger contract, product or fleet evidence can therefore be labelled as inferred production autosales and show the possible products and buildings. Rock-specific completion matching and earlier supply repairs remain included.
+The app hashes savegame payloads and reuses unchanged parsed data, shares one FTP session between `missions.xml` and `placeables.xml`, and uses adaptive polling. Savegame and map checks can slow down while the server is empty, then return to the configured interval as soon as activity resumes.
+
+The Diagnostics page is read-only and shows source health, latency, payload sizes, changed/unchanged checks, current polling intervals and database housekeeping.
+
+## Updates and persistence
+
+The SQLite database and app state live under `/data` and are preserved across normal repository updates. Transaction history, play sessions, snapshots and saved classification rules therefore survive version upgrades.
+
+Future releases are installed through Home Assistant's normal **Update** button. Updating FS25 Server Hub restarts this app only; Home Assistant Core does not need to be restarted.
+
+See **DOCS.md** for full setup instructions, field descriptions, polling guidance and the GPORTAL FTP walkthrough.
